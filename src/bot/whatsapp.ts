@@ -5,7 +5,7 @@ import makeWASocket, {
 } from "@whiskeysockets/baileys";
 import { commandHandler } from "../handlers/command.handler.js";
 import QRCode from "qrcode-terminal";
-
+const BOT_START_TIME =  Math.floor(Date.now() / 1000);
 export async function startWhatsappBot() {
   const { state, saveCreds } = await useMultiFileAuthState("auth");
 
@@ -50,7 +50,7 @@ export async function startWhatsappBot() {
     },
   );
 
-  sock.ev.on("messages.upsert", async ({ messages }) => {
+  sock.ev.on("messages.upsert", async ({ messages,type }) => {
     const message = messages[0];
 
     if (!message.message) return;
@@ -65,6 +65,12 @@ export async function startWhatsappBot() {
 
     if (!text) return;
 
+if (
+  Number(
+    message.messageTimestamp
+  ) < BOT_START_TIME
+)
+  return;
     console.log("📩", text);
 
     if (chatId) await commandHandler(sock, chatId, text);

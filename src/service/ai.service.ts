@@ -63,7 +63,8 @@ Formato:
   "genres": [],
   "excludeGenres": [],
   "similarTo": [],
-  "minYear": null
+  "minYear": null,
+  "actors": []
 }
 
 Ejemplo:

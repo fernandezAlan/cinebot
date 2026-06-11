@@ -33,7 +33,7 @@ export async function RecommendMovieCommand(
 ) {
   const preferences:MoviePreferences = await parseMoviePreferences(text);
 
-  //console.log(preferences);
+  console.log(preferences);
   const resolvedPref:MoviePreferences = await normalizePreferences(preferences);
 
   const movie: any = await recommendMovie(resolvedPref);

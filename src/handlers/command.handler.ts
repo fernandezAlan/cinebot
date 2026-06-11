@@ -1,4 +1,4 @@
-import { MovieCommand, RecommendMovieCommand } from "../commands/movie.command.js";
+import {  RecommendMovieCommand } from "../commands/movie.command.js";
 import { pingCommand } from "../commands/ping.command.js";
 
 export async function commandHandler(sock: any, chatId: string, text: string) {

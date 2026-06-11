@@ -40,7 +40,7 @@ export const getSimilarMovie = async (movieiD: string) => {
 };
 
 export const discoverMovie = async (preferences: MoviePreferences) => {
-  const { genres, excludeGenres, cast } = preferences;
+  const { genres, excludeGenres, actors } = preferences;
   const response = await tmdbApi.get("/discover/movie", {
     params: {
       include_adult: false,
@@ -51,8 +51,9 @@ export const discoverMovie = async (preferences: MoviePreferences) => {
       primary_release_year: preferences.minYear,
       ["vote_average.gte"]: 7,
       language: "es-AR",
-      with_cast: cast?.join(","),
+      with_cast: actors?.join(","),
     },
   });
+  console.log("respuesta de tmdb:", response.data.results);
   return response.data.result;
 };

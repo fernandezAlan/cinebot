@@ -1,14 +1,16 @@
 import { MoviePreferences, ScoredMovie } from "../constants/movieConstants.js";
 import { searchMovieId } from "../utils/movie.utils.js";
 import { discoverMovie, getSimilarMovie } from "./tmdb.service.js";
-
+/**
+ * Recomienda una película basada en las preferencias del usuario.
+ * @param preferences - Las preferencias del usuario.
+ * @returns La película recomendada o null si no se encuentra ninguna.
+ */
 export async function recommendMovie(preferences: MoviePreferences) {
   
-  const movies = similarMovieId
-  ? await getSimilarMovie(similarMovieId)
-  : await discoverMovie(preferences);
-  
-  if (!movies.length) {
+  const movies =  await discoverMovie(preferences);
+  console.log("movies:", movies);
+  if (!movies?.length) {
     return null;
   }
   
