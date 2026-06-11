@@ -3,7 +3,11 @@ import { movieGenres } from "../constants/movieGenres.js";
 import { searchActorByName } from "./tmdb.service.js";
 
 
-
+/**
+ * Convierte las preferencias de película del usuario en un formato que la API de TMDB pueda entender. Esto incluye convertir los nombres de los géneros a sus IDs correspondientes y buscar los IDs de los actores basándose en sus nombres.
+ * @param {MoviePreferences} preferences - Las preferencias de película del usuario, incluyendo géneros, géneros a excluir, actores, películas similares y año mínimo de lanzamiento.
+ * @returns {Promise<MoviePreferences>} Un objeto de preferencias de película con los géneros convertidos a IDs y los actores convertidos a sus IDs correspondientes.
+*/
 export async function normalizePreferences(preferences: MoviePreferences):Promise<MoviePreferences> {
   const genreIds =
     preferences.genres?.map(

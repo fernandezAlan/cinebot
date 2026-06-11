@@ -1,9 +1,22 @@
 import { MoviePreferences } from "../constants/movieConstants.js";
 import { groq } from "../integrations/groq.js";
-
+/**
+ * 
+ * @param {string} userMessage - El mensaje del usuario con sus preferencias de película
+ * 
+ * Convierte el mensaje del usuario en un objeto de preferencias de película. 
+ * @returns {MoviePreferences} Un objeto con las preferencias de película del usuario, incluyendo géneros, géneros a excluir, películas similares y año mínimo de lanzamiento.  ejemplo de respuesta:
+{
+  "genres": [],
+  "excludeGenres": [],
+  "similarTo": [],
+  "minYear": null
+} 
+ */
 export async function parseMoviePreferences(
   userMessage: string,
 ): Promise<MoviePreferences> {
+
   const completion = await groq.chat.completions.create({
     model: "llama-3.3-70b-versatile",
 
