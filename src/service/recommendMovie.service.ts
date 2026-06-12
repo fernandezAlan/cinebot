@@ -1,4 +1,4 @@
-import { MoviePreferences, ScoredMovie } from "../constants/movieConstants.js";
+import { MoviePreferences, ScoredMovie } from "../constants/movie.types.js";
 import { searchMovieId } from "../utils/movie.utils.js";
 import { discoverMovie, getSimilarMovie } from "./tmdb.service.js";
 /**
@@ -9,7 +9,7 @@ import { discoverMovie, getSimilarMovie } from "./tmdb.service.js";
 export async function recommendMovie(preferences: MoviePreferences) {
   
   const movies =  await discoverMovie(preferences);
-  console.log("movies:", movies);
+  console.log("discoverMovie:", movies);
   if (!movies?.length) {
     return null;
   }

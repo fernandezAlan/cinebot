@@ -1,6 +1,7 @@
 import axios from "axios";
 import dotenv from "dotenv";
-import { MoviePreferences } from "../constants/movieConstants.js";
+import { MoviePreferences } from "../constants/movie.types.js";
+import { MovieCreditsType } from "../constants/person.types.js";
 
 dotenv.config();
 
@@ -22,15 +23,15 @@ export const getMovie = async () => {
   return res.data;
 };
 
-export async function searchActorByName(actorName: string) {
+export async function searchPersonByName(name: string) {
   const response = await tmdbApi.get("/search/person", {
     params: {
-      query: actorName,
+      query: name,
 
       language: "es-AR",
     },
   });
-
+  console.log("searchPersonByName response:", response.data.results);
   return response.data.results[0];
 }
 
@@ -40,7 +41,7 @@ export const getSimilarMovie = async (movieiD: string) => {
 };
 
 export const discoverMovie = async (preferences: MoviePreferences) => {
-  const { genres, excludeGenres, actors } = preferences;
+  const { genres, excludeGenres, cast,crew } = preferences;
   const response = await tmdbApi.get("/discover/movie", {
     params: {
       include_adult: false,
@@ -51,9 +52,15 @@ export const discoverMovie = async (preferences: MoviePreferences) => {
       primary_release_year: preferences.minYear,
       ["vote_average.gte"]: 7,
       language: "es-AR",
-      with_cast: actors?.join(","),
+      with_cast: cast?.join(","),
+      with_crew: crew?.join(","),
     },
   });
-  console.log("respuesta de tmdb:", response.data.results);
-  return response.data.result;
+  return response.data.results;
 };
+
+export async function getMovieCredits(personId: string): Promise<MovieCreditsType> {
+   const respose = await tmdbApi.get(`/person/${personId}/movie_credits`)
+   console.log("getMovieCredits response:", respose.data.cast.length);
+   return respose.data;
+}

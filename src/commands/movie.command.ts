@@ -1,4 +1,4 @@
-import { MoviePreferences } from "../constants/movieConstants.js";
+import { MoviePreferences } from "../constants/movie.types.js";
 import { parseMoviePreferences } from "../service/ai.service.js";
 import { normalizePreferences } from "../service/normalizePreferences.service.js";
 import { recommendMovie } from "../service/recommendMovie.service.js";

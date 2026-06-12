@@ -1,4 +1,4 @@
-import { MoviePreferences } from "../constants/movieConstants.js";
+import { MoviePreferences } from "../constants/movie.types.js";
 import { groq } from "../integrations/groq.js";
 /**
  * 
@@ -64,7 +64,8 @@ Formato:
   "excludeGenres": [],
   "similarTo": [],
   "minYear": null,
-  "actors": []
+  "crew": [],
+  "cast": []
 }
 
 Ejemplo:
@@ -89,6 +90,19 @@ Respuesta:
   "minYear": null
 }
 
+Usuario:
+"quiero ver una pelicula de tim burton con johnny depp"
+
+Respuesta:
+
+{
+  "genres": [],
+  "excludeGenres": [],
+  "similarTo": [],
+  "minYear": null,
+  "cast": ["Johnny Depp"],
+  "crew": ["Tim Burton"]
+}
 `,
       },
 
