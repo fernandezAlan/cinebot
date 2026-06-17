@@ -9,17 +9,11 @@ import { discoverMovie, getSimilarMovie } from "./tmdb.service.js";
 export async function recommendMovie(preferences: MoviePreferences) {
   
   const movies =  await discoverMovie(preferences);
-  console.log("discoverMovie:", movies);
   if (!movies?.length) {
     return null;
   }
   
   const topMovies = movies.slice(0, 10);
-  topMovies.forEach((element: { title: any }) => {
-    console.log("nombre:", element.title);
-  });
-  const randomMovie = topMovies[Math.floor(Math.random() * topMovies.length)];
-  
-  return randomMovie;
-  
+  //const randomMovie = topMovies[Math.floor(Math.random() * topMovies.length)];
+  return topMovies;
 }

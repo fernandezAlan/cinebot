@@ -1,4 +1,6 @@
 
+import { RESULTS_PAGE_SIZE } from "../constants/constanst.js";
+import { MovieResult } from "../constants/movie.types.js";
 import { CreditType, MovieCredits } from "../constants/person.types.js";
 import { getMovieCredits, tmdbApi } from "../service/tmdb.service.js";
 
@@ -35,4 +37,20 @@ searchMovieId(
 
   return res.data.results[0]
     ?.id;
+}
+
+export function getPage(
+  results: MovieResult[],
+  page: number
+) {
+  const start =
+    page * RESULTS_PAGE_SIZE;
+
+  const end =
+    start + RESULTS_PAGE_SIZE;
+
+  return results.slice(
+    start,
+    end
+  );
 }

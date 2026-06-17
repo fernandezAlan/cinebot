@@ -1,64 +1,57 @@
-import { MoviePreferences } from "../constants/movie.types.js";
+import { commandNames } from "../constants/constanst.js";
+import { MoviePreferences, MovieResult } from "../constants/movie.types.js";
+import { messageHandler } from "../handlers/messages.handler.js";
 import { parseMoviePreferences } from "../service/ai.service.js";
 import { normalizePreferences } from "../service/normalizePreferences.service.js";
 import { recommendMovie } from "../service/recommendMovie.service.js";
-import { getMovie } from "../service/tmdb.service.js";
-/*
-export async function MovieCommand(sock: any, chatId: string) {
-  const movie = await getMovie();
-  
-  const posterUrl = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
-  
-  await sock.sendMessage(chatId, {
-    image: {
-      url: posterUrl,
-    },
-    
-    caption: `
-    🎬 *${movie.title}*
-    (${movie.original_title})
-    
-    ⭐ ${movie.vote_average}
-    
-    📝 ${movie.overview}
-    `.trim(),
-  });
-}
-*/
+import { getMovie, getNowPlayingMovies } from "../service/tmdb.service.js";
+import { searchSessions } from "../store/search-session.store.js";
+
 
 export async function RecommendMovieCommand(
   sock: any,
   chatId: string,
   text: string,
 ) {
-  const preferences:MoviePreferences = await parseMoviePreferences(text);
+  const preferences: MoviePreferences = await parseMoviePreferences(text);
+  const resolvedPref: MoviePreferences =
+    await normalizePreferences(preferences);
+  const movies: any[] = await recommendMovie(resolvedPref);
 
-  console.log(preferences);
-  const resolvedPref:MoviePreferences = await normalizePreferences(preferences);
-
-  const movie: any = await recommendMovie(resolvedPref);
-
-  if (!movie) {
+  if (!movies || movies.length === 0) {
     await sock.sendMessage(chatId, {
       text: "No encontré una buena recomendación 😢",
     });
-
     return;
   }
-
-  const posterUrl = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
-
-  await sock.sendMessage(chatId, {
-    image: {
-      url: posterUrl,
-    },
-
-    caption: `
-🎬 *${movie.title}*
-
-⭐ ${movie.vote_average}
-
-📝 ${movie.overview}
-    `.trim(),
+    searchSessions.set(chatId, {
+    command: commandNames.RECOMMEND,
+    results: movies,
+    currentPage: 0,
   });
+  const message = messageHandler(commandNames.RECOMMEND, movies);
+  await sock.sendMessage(chatId, message);
+}
+
+export async function NowPlayingMoviesCommand(
+  sock: any,
+  chatId: string,) {
+  const movies: MovieResult[] = await getNowPlayingMovies();
+  if (!movies || movies.length === 0) {
+    await sock.sendMessage(chatId, {
+      text: "No encontré películas en cartelera 😢",
+    });
+    return;
+  }
+  //save search session
+  searchSessions.set(chatId, {
+    command: commandNames.NOW_PLAYING,
+    results: movies,
+    currentPage: 0,
+  });
+  //sort movies by vote_average
+  movies.sort((a, b) => b.vote_average - a.vote_average);
+  const topMovies = movies.slice(0, 10);
+  const message = messageHandler(commandNames.NOW_PLAYING, topMovies);
+  await sock.sendMessage(chatId,message);
 }

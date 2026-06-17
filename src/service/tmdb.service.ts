@@ -1,6 +1,6 @@
 import axios from "axios";
 import dotenv from "dotenv";
-import { MoviePreferences } from "../constants/movie.types.js";
+import { MoviePreferences, MovieResult } from "../constants/movie.types.js";
 import { MovieCreditsType } from "../constants/person.types.js";
 
 dotenv.config();
@@ -63,4 +63,9 @@ export async function getMovieCredits(personId: string): Promise<MovieCreditsTyp
    const respose = await tmdbApi.get(`/person/${personId}/movie_credits`)
    console.log("getMovieCredits response:", respose.data.cast.length);
    return respose.data;
+}
+
+export async function getNowPlayingMovies(): Promise<MovieResult[]> {
+  const response = await tmdbApi.get("/movie/now_playing");
+  return response.data.results;
 }

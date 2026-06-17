@@ -1,4 +1,4 @@
-export async function pingCommand(
+export async function PingCommand(
   sock: any,
   chatId: string
 ) {
