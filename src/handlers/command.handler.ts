@@ -5,6 +5,7 @@ import { commandNames } from "../constants/constanst.js";
 import { CreditType } from "../constants/person.types.js";
 import {NextCommand} from "../commands/next.command.js";
 import { SelectOptionCommand } from "../commands/selectOption.command.js";
+import { GameCommand } from "../commands/game.command.js";
 export async function commandHandler(sock: any, chatId: string, text: string) {
   const command = text.toLowerCase().split(" ")[0].trim();
   switch (command) {
@@ -29,6 +30,10 @@ export async function commandHandler(sock: any, chatId: string, text: string) {
     case commandNames.SELECT_OPTION:
       const option = Number(text.toLowerCase().split(" ")[1].trim());
       await SelectOptionCommand(sock, chatId, option);
+      break;
+      case commandNames.GAME:
+        await GameCommand(sock, chatId);
+        break;
     default:
       break;
   }

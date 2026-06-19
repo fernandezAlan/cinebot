@@ -1,6 +1,10 @@
 import { commandNames } from "../constants/constanst.js";
 
-export function messageHandler(command: commandNames, results: any[]) {
+export function messageHandler(
+  command: commandNames,
+  results: any[],
+  gameoptions?: any,
+) {
   let message = {};
   let posterUrl = "";
   switch (command) {
@@ -61,6 +65,14 @@ export function messageHandler(command: commandNames, results: any[]) {
           .join("\n") +
         `\nPuedes usar el comando ${commandNames.NEXT} para ver la siguiente página de resultados`;
       message = { text };
+      break;
+    case commandNames.GAME:
+      posterUrl = `https://image.tmdb.org/t/p/w500${gameoptions.backdropUrl}`;
+      message = {
+        image: {
+          url: posterUrl,
+        },
+      };
       break;
   }
   return message;

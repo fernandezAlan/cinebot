@@ -40,7 +40,7 @@ export const getSimilarMovie = async (movieiD: string) => {
   return response.data.result;
 };
 
-export const discoverMovie = async (preferences: MoviePreferences) => {
+export const discoverMovie = async (preferences: MoviePreferences,page = 1) => {
   const { genres, excludeGenres, cast,crew } = preferences;
   const response = await tmdbApi.get("/discover/movie", {
     params: {
@@ -54,6 +54,7 @@ export const discoverMovie = async (preferences: MoviePreferences) => {
       language: "es-AR",
       with_cast: cast?.join(","),
       with_crew: crew?.join(","),
+      page:page
     },
   });
   return response.data.results;
@@ -67,5 +68,12 @@ export async function getMovieCredits(personId: string): Promise<MovieCreditsTyp
 
 export async function getNowPlayingMovies(): Promise<MovieResult[]> {
   const response = await tmdbApi.get("/movie/now_playing");
-  return response.data.results;
+  //just return movies with more than 500 votes to ensure quality of recommendations
+  return response.data.results.filter((movie: MovieResult) => movie.vote_count >= 100);
+}
+
+export async function getMovieImages(movieId: string) {
+  const response = await tmdbApi.get(`/movie/${movieId}/images`);
+  console.log("getMovieImages response:", response.data);
+  return response.data.backdrops;
 }

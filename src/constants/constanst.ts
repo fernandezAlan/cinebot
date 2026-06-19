@@ -7,4 +7,5 @@ export enum commandNames {
   NOW_PLAYING = "!cartelera",
   NEXT = "!sig",
   SELECT_OPTION = "!opcion",
+  GAME = "!juego",
 }

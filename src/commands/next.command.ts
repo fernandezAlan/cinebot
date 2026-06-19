@@ -35,6 +35,8 @@ NextCommand(
   if (
     pageResults.length === 0
   ) {
+    // decrease page to avoid out of bounds in future requests
+    session.currentPage--;
     await sock.sendMessage(
       chatId,
       {
